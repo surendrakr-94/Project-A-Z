@@ -1,3 +1,4 @@
+const blogModel = require("../models/blogModel")
 
 
 const createBlog = async function (req, res) {
@@ -12,5 +13,45 @@ const createBlog = async function (req, res) {
 
 
 }
+/*Returns all blogs in the collection that aren't deleted and are published
+Return the HTTP status 200 if any documents are found. The response structure should be like this
+If no documents are found then return an HTTP status 404 with a response like this blogs list by applyings. Query param can have any combination of belows.
+By author Id
+By category
+List of blogs that have a specific tag
+List of blogs that have a specific subcategory example of a query url: blogsnamevalue&f2=fv2
+
+*/
+const getBlogsData=async function (req,res)
+{
+    try {
+      //  let id = req.query.authorId
+     //   let Category = req.query.category
+      //  let tag = req.query.tags
+      //  let subcategory = req.query.subcategory
+       
+      
+            let Blogs = await blogModel.find({ isDeleted: false, isPublished: true })
+
+          if (Blogs) 
+             {  
+                 res.status(200).send({ status: true, data: Blogs }) 
+             }
+          
+          else  
+           { 
+                return res.status(404).send({ status: false, msg: "Not Found" }) 
+            }
+    
+          
+    }
+    catch (err) {
+       
+        res.status(500).send({ msg: "Server Error", error: err.message })
+ 
+    }
+}
 
 module.exports.createBlog = createBlog
+
+module.exports.getBlogsData=getBlogsData
