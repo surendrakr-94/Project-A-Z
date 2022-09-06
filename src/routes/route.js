@@ -11,7 +11,10 @@ router.get("/test-me", function (req, res) {
 
 
 router.get("/GetAuthor", Author.getAuthorsData)
+router.post("/createblog",Blog.createBlog)
 router.get("/GetBlogs", Blog.getBlogsData)
-
+router.put("/updateBlog/:blogId",Blog.updateBlog,)
+router.delete("/deleteById/:blogId",Blog.deleteById)
+router.delete("/deleteBlogsquery",Blog.deleteBlogsquery)
 
 module.exports = router;
