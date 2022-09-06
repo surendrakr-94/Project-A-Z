@@ -25,13 +25,13 @@ List of blogs that have a specific subcategory example of a query url: blogsname
 const getBlogsData=async function (req,res)
 {
     try {
-      //  let id = req.query.authorId
-     //   let Category = req.query.category
-      //  let tag = req.query.tags
-      //  let subcategory = req.query.subcategory
+        let authorId = req.query.authorId
+        let category = req.query.category
+        let tags = req.query.tags
+        let subcategory = req.query.subcategory
        
-      
-            let Blogs = await blogModel.find({ isDeleted: false, isPublished: true })
+        if(authorId === undefined && category === undefined && tags === undefined && subcategory === undefined)
+         {   let Blogs = await blogModel.find({ isDeleted: false, isPublished: true })
 
           if (Blogs) 
              {  
@@ -42,9 +42,21 @@ const getBlogsData=async function (req,res)
            { 
                 return res.status(404).send({ status: false, msg: "Not Found" }) 
             }
-    
+        }
+
+        else
+         {  let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subcategory: subcategory }] })
+            
+            if (blogsFilter) {
+
+                res.status(200).send({ status: true, data: blogsFilter })
+            }
+            else {
+               
+                res.status(404).send({ status: false, msg: "Not Found" })
+            }
           
-    }
+    }}
     catch (err) {
        
         res.status(500).send({ msg: "Server Error", error: err.message })
