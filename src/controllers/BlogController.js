@@ -16,26 +16,25 @@ const createBlog = async function (req, res) {
 }
 
 const getBlogsData = async function (req, res) {
-    try {
+    
         let authorId = req.query.authorId
         let category = req.query.category
         let tags = req.query.tags
         let subcategory = req.query.subcategory
-
         if (authorId === undefined && category === undefined && tags === undefined && subcategory === undefined) {
-            let Blogs = await blogModel.find({ isDeleted: false, isPublished: true })
+            let Blogs = await blogModel.findOne({ isDeleted: false, isPublished: true})
 
             if (Blogs) {
                 res.status(200).send({ status: true, data: Blogs })
             }
 
             else {
-                return res.status(404).send({ status: false, msg: "Not Found" })
+                return res.status(404).send({ status: false, msg: "data is not present" })
             }
         }
 
         else {
-            let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subcategory: subcategory }] })
+            let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subCategory: subCategory }] })
 
             if (blogsFilter) {
 
@@ -48,12 +47,33 @@ const getBlogsData = async function (req, res) {
 
         }
     }
-    catch (err) {
 
-        res.status(500).send({ msg: "Server Error", error: err.message })
 
-    }
-}
+//          if (authorId === undefined && category ===undefined && tags === undefined && subcategory === undefined) {
+//             let Blogs = await blogModel.findOne({ isDeleted:false, isPublished:true })
+//               return res.send({data:Blogs})
+            
+//          } if(Blogs){return res.send({msg:"no one here"})}
+
+//         else{    let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subcategory: subcategory }] })
+
+//             if (blogsFilter) {
+
+//                 res.status(200).send({ status: true, data: blogsFilter })
+//             }
+//             else {
+
+//                 res.status(404).send({ status: false, msg: "Not Found" })
+//             }
+
+//         }
+//     }
+//     catch (err) {
+
+//         res.status(500).send({ msg: "Server Error", error: err.message })
+
+//     }
+// }
 
 
 
@@ -100,7 +120,11 @@ const deleteBlogsquery = async function (req, res) {
 
 
         let data=req.query
+        // console.log(data.length==0)
+        console.log(!(data.length==0))
+        if(!(data.length==0)){return res.send({msg:"plz enter valid request"})}
         let savedata=await blogModel.findOne(data)
+        console.log(!(data.length==0))
         if(!savedata){return res.status(404).send({status:false,msg:"not a valid request"})}
 
         if(savedata.isDeleted==true){return res.status(400).send({status:false,msg:"this document is already deleted"})}
