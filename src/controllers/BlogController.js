@@ -16,73 +16,43 @@ const createBlog = async function (req, res) {
 }
 
 const getBlogsData = async function (req, res) {
-    
-        let authorId = req.query.authorId
-        let category = req.query.category
-        let tags = req.query.tags
-        let subcategory = req.query.subcategory
-        if (authorId === undefined && category === undefined && tags === undefined && subcategory === undefined) {
-            let Blogs = await blogModel.findOne({ isDeleted: false, isPublished: true})
 
-            if (Blogs) {
-                res.status(200).send({ status: true, data: Blogs })
-            }
+    let authorId = req.query.authorId
+    let category = req.query.category
+    let tags = req.query.tags
+    let subCategory = req.query.subCategory
+    if (authorId === undefined && category === undefined && tags === undefined && subCategory === undefined) {
+        let Blogs = await blogModel.find({ isDeleted: false, isPublished: true })
 
-            else {
-                return res.status(404).send({ status: false, msg: "data is not present" })
-            }
+        if (Blogs) {
+            res.status(200).send({ status: true, data: Blogs })
         }
 
         else {
-            let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subCategory: subCategory }] })
-
-            if (blogsFilter) {
-
-                res.status(200).send({ status: true, data: blogsFilter })
-            }
-            else {
-
-                res.status(404).send({ status: false, msg: "Not Found" })
-            }
-
+            return res.status(404).send({ status: false, msg: "data is not present" })
         }
     }
 
+    else {
+        let blogsFilter = await blogModel.find({ $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subCategory: subCategory }]} , {isDeleted: false, isPublished: true})
+        if (blogsFilter) {
 
-//          if (authorId === undefined && category ===undefined && tags === undefined && subcategory === undefined) {
-//             let Blogs = await blogModel.findOne({ isDeleted:false, isPublished:true })
-//               return res.send({data:Blogs})
-            
-//          } if(Blogs){return res.send({msg:"no one here"})}
+            res.status(200).send({ status: true, data: blogsFilter })
+        }
+        else {
 
-//         else{    let blogsFilter = await blogModel.find({ isDeleted: false, isPublished: true, $or: [{ authorId: authorId }, { category: category }, { tags: tags }, { subcategory: subcategory }] })
-
-//             if (blogsFilter) {
-
-//                 res.status(200).send({ status: true, data: blogsFilter })
-//             }
-//             else {
-
-//                 res.status(404).send({ status: false, msg: "Not Found" })
-//             }
-
-//         }
-//     }
-//     catch (err) {
-
-//         res.status(500).send({ msg: "Server Error", error: err.message })
-
-//     }
-// }
-
-
-
-
+            res.status(404).send({ status: false, msg: "Not Found" })
+        }
+    }
+}
 const updateBlog = async (req, res) => {
     try {
         let blogId = req.params.blogId;
+        if (blogId.length < 24 && blogId.length > 24) { return res.status(404).send({ status: false, msg: "plz enter correct blogId" }) }
+
+
         let data = await blogModel.findById(blogId);
-        // console.log(data);
+
         if (data.isDeleted == true) { return res.status(400).send({ status: false, msg: "this is already deleted" }) }
 
         if (!data) {
@@ -102,7 +72,9 @@ const updateBlog = async (req, res) => {
 
 const deleteById = async function (req, res) {
     try {
-        const blogId = req.params.blogId;
+        // const blogId = req.params.blogId;
+        // if (blogId < 24 && blogId > 24) { return res.status(404).send({ status: false, msg: "plz enter correct blogId" }) }
+
         const blog = await blogModel.findById(blogId);
         if (!blog || blog.isDeleted === true) {
             return res.status(404).send({ status: false, msg: "no such blog exists" })
@@ -112,25 +84,36 @@ const deleteById = async function (req, res) {
 
     } catch (error) {
         console.log(error);
-        return res.status(500).send({ status: false, error: error.name, msg: error.message })
+        return res.status(500).send({ status: false, msg: error.message })
     }
 }
 
 const deleteBlogsquery = async function (req, res) {
+    
+        try {
+    
+            let authorid = req.query.authorId;
+            let Category = req.query.category;
+            let Subcategory = req.query.subcategory;
+            let tag = req.query.tags;
+            let unpublished = req.query.isPublished
+           
+    
+            let deletedData = await blogModel.findOneAndUpdate({ $or: [{ authorId: authorid }, { isPublished: unpublished }, { category: Category }, { tags: tag }, { subcategory: Subcategory }] },{$set:{ isDeleted: true }}, { new: true })
+            if (!deletedData) {
+                return res.status(404).send("No such blog exists")
+            }
+            else {
+                deletedData.deletedAt=Date.now()
+                res.status(200).send({ status: true, msg: "Data deleted now",deletedAt:deletedData.deletedAt })
+            }
+        }
+        catch (err) {
+            res.status(500).send({ error: err.message })
+        }
+    }
 
 
-        let data=req.query
-        // console.log(data.length==0)
-        console.log(!(data.length==0))
-        if(!(data.length==0)){return res.send({msg:"plz enter valid request"})}
-        let savedata=await blogModel.findOne(data)
-        console.log(!(data.length==0))
-        if(!savedata){return res.status(404).send({status:false,msg:"not a valid request"})}
-
-        if(savedata.isDeleted==true){return res.status(400).send({status:false,msg:"this document is already deleted"})}
-
-        let final=await blogModel.findOneAndUpdate(savedata,{$set:{isDeleted:true,deletedAt:Date.now()}},{new:true})
-    res.status(200).send({status:true,msg:final})}
 
 module.exports.createBlog = createBlog
 module.exports.getBlogsData = getBlogsData
