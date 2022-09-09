@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken')
 const blogModel = require('../models/blogModel')
 
 
-const mid1 = async function (req, res, next) {
+const authentication = async function (req, res, next) {
     try {
         let token = req.headers["x-powered-by"]
-        if (!token) { return res.status(400).send({ status: false, msg: "token must be present" }) }
+        if (!token) { return res.status(404).send({ status: false, msg: "token must be present" }) }
 
         let decodeToken = jwt.verify(token, "functionupiswaywaycoolHariomSemwal")
         if (!decodeToken) {
@@ -19,42 +19,63 @@ const mid1 = async function (req, res, next) {
     } catch (error) { res.status(500).send(error.message) }
 }
 
-const mid2 = async function (req, res, next) {
+
+
+const blogAuthorisation= async function (req, res, next) {
     try {
         let token = req.headers["x-powered-by"]
         if (!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
         let decodeToken = jwt.verify(token, "functionupiswaywaycoolHariomSemwal")
+        console.log(decodeToken)
         if (!decodeToken) {
-            return res.status(404).send({ status: false, msg: " invalid token" })
+            return res.status(401).send({ status: false, msg: " invalid token" })
         }
 
         let rahul = req.params.blogId
+        
         let blogId1 = await blogModel.findById(rahul)
-        if (!blogId1) { return res.send({ msg: "blog not found this id" }) }
-        // console.log(authorId)
-        // console.log(decodeToken.id)
-        if (decodeToken.id == blogId1.rahul) {
+       
+        if (!blogId1) { return res.status(404).send({ status:false,msg: "blog not found this id" }) }
+        
+        if (decodeToken.id == blogId1.authorId) {
             next()
         }
         else { return res.status(403).send({ status: false, msg: "you not access this id " }) }
     }
-    catch (error) { res.status(500).send(error.message) }
-}
+     catch (error) { res.status(500).send(error.message) }
+ }
 
 
 
-const mid3 = async function (req, res, next) {
+const AuthorisationDeleteQuery = async function (req, res, next) {
     try {
         let token = req.headers["x-powered-by"]
-        if(!token) { return res.status(400).send({ status: false, msg: "token must be present" }) }
+        if(!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
 
-        let decodeToken = await jwt.verify(token,"functionupiswaywaycoolHariomSemwal")
-       
-        if(decodeToken.id===req.params.authorId) {
+        let decodeToken =jwt.verify(token,"functionupiswaywaycoolHariomSemwal")
+   
+        if(decodeToken.id===req.query.authorId) {
+
              next()
-        } else{res.send({msg:"wrong author id"})}
+        } else{res.status(401).send({msg:"query id is incorrect "})}
     } catch (error) { res.status(500).send(error.message) }
 }
 
+
+
+
+const  authorAuthorisationBody= async function (req, res, next) {
+    try {
+        let token = req.headers["x-powered-by"]
+        if(!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
+
+        let decodeToken =jwt.verify(token,"functionupiswaywaycoolHariomSemwal")
+        if(decodeToken.id===req.body.authorId) {
+
+             next()
+        } else{ return res.status(401).send({msg:"id is incorrect"})}
+    } catch (error) { return  res.status(500).send(error.message) }
+}
+
    
-    module.exports = { mid1, mid2, mid3 }
+    module.exports = { authentication, blogAuthorisation, AuthorisationDeleteQuery,authorAuthorisationBody }
