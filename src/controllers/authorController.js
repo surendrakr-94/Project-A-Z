@@ -49,8 +49,18 @@ const getAuthorsData = async function (req, res) {
 
 const login = async function (req, res) {
     try {
-        let Email = req.body.email
-        let Password = req.body.password
+        let email = req.body.email
+        if (!isValid(email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
+        let Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())
+        if (!Email)
+         { return res.status(400).send({ status: false, msg: "enter Valid email " }) }
+        
+        let password = req.body.password
+        if (!isValid(password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
+        let Password = /^[a-zA-Z0-9]{6,109}$/.test(password.trim())
+        if (!Password) 
+        { return res.status(400).send({ status: false, msg: "enter Valid password ( min=6)request" }) }
+        
         let data = await AuthorModel.findOne({ email: Email, password: Password })
         if (!data) { return res.status(400).send({ msg: "email and password is incorrect" }) }
 

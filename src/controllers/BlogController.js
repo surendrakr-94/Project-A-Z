@@ -2,18 +2,53 @@ const { time } = require("console")
 const blogModel = require("../models/blogModel")
 const authormodel = require("../models/authorModel")
 
+
+const isValid = function (check) {
+    if (!check || check == undefined) { return false }
+    if (typeof check !== "string" || check.trim().length == 0) { return false }
+    return true
+}
+
 const createBlog = async function (req, res) {
     try {
         let data = req.body
+
+        const {title,body,tags, category, subCategory} = data
         if (data.authorId) {
             const check = await authormodel.find(data.author_id)
             if (check) {
 
+              if (!isValid(title)) { return res.status(400).send({ status: false, msg: "title is required" }) }
+              let ntitle = /^[a-zA-Z]{2,9}$/.test(title.trim())
+              if (!ntitle) { return res.status(400).send({ status: false, msg: "enter Valid title name " }) }
+                
+              if (!isValid(body)) { return res.status(400).send({ status: false, msg: "body is required" }) }
+              let nbody = /^[a-zA-Z]{2,9}$/.test(body.trim())
+              if (!nbody) { return res.status(400).send({ status: false, msg: "enter Valid body name " }) }
+
+              
+              if (!isValid(tags)) { return res.status(400).send({ status: false, msg: "tags is required" }) }
+              let ntags = /^[a-zA-Z]{2,9}$/.test(tags.trim())
+              if (!ntags) { return res.status(400).send({ status: false, msg: "enter Valid tags name " }) }
+
+              if (!isValid(category)) { return res.status(400).send({ status: false, msg: "category is required" }) }
+              let ncategory = /^[a-zA-Z]{2,9}$/.test(category.trim())
+              if (!ncategory) { return res.status(400).send({ status: false, msg: "enter Valid category name " }) }
+
+              if (!isValid(subCategory)) { return res.status(400).send({ status: false, msg: "subcategory is required" }) }
+              let nsubCategory = /^[a-zA-Z]{2,9}$/.test(subCategory.trim())
+              if (!nsubCategory) { return res.status(400).send({ status: false, msg: "enter Valid subcategory name " }) }
+
+
+
                 let saveData = await blogModel.create(data)
                 res.status(201).send({ status: true, msg: saveData })
-            } else return res.status(400).send({ status: false, msg: "plese enter currect author_id" })
-        } else return res.status(400).send({ status: false, msg: "author_id is required" })
-    } catch (err) {
+            } 
+            else return res.status(400).send({ status: false, msg: "plese enter currect author_id" })
+        } 
+        else return res.status(400).send({ status: false, msg: "author_id is required" })
+    } 
+    catch (err) {
         console.log(err.message);
         res.status(500).send({ error: err.message });
     }
@@ -90,20 +125,28 @@ const deleteById = async function (req, res) {
 
 const deleteBlogsquery = async function (req, res) {
 
-     try {
-        let data = req.query
-        let saveData = await blogModel.findOne(data)
+    try {
 
-        if (saveData.isDeleted == true) { return res.send({ msg: "data is already delete" }) }
-        else {
-            let updateData = await blogModel.findByIdAndUpdate(saveData, { $set: { isDeleted: true ,deletedAt:Date.now(),isPublished:false} },{new:true})
+       let data = req.query
+       if (Object.keys(data).length == 0) 
+       return res.status(400).send({ status: false, message: "Enter a valid input in body" });
 
-            res.status(200).send({ status: true, msg: updateData })
-        }
-    }
-    catch (err) {
-        res.status(500).send({ error: err.message })
-    }
+
+       let saveData = await blogModel.findOne(data)
+        console.log(saveData)
+
+      
+       if (saveData.isDeleted == true)
+        { return res.send({ msg: "data is already delete" }) }
+       else {
+           let updateData = await blogModel.findByIdAndUpdate(saveData, { $set: { isDeleted: true ,deletedAt:Date.now(),isPublished:false,publishedAt:null} },{new:true})
+
+           res.status(201).send({ status: true, msg: updateData })
+       }
+   }
+   catch (err) {
+       res.status(500).send({ error: err.message })
+   }
 }
 
 

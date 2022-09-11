@@ -65,11 +65,20 @@ const AuthorisationDeleteQuery = async function (req, res, next) {
 
 
 const  authorAuthorisationBody= async function (req, res, next) {
-    try {
-        let token = req.headers["x-powered-by"]
+    try {  
+        
+           let token = req.headers["x-powered-by"]
+           authorId=req.body.authorId
+           if(!authorId)       
+           { return res.status(401).send({msg:"id is required"})} 
+           
+           
+       
         if(!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
-
+     
         let decodeToken =jwt.verify(token,"functionupiswaywaycoolHariomSemwal")
+
+
         if(decodeToken.id===req.body.authorId) {
 
              next()
