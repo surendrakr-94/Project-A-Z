@@ -19,27 +19,12 @@ const createBlog = async function (req, res) {
             if (check) {
 
               if (!isValid(title)) { return res.status(400).send({ status: false, msg: "title is required" }) }
-              let ntitle = /^[a-zA-Z]{2,9}$/.test(title.trim())
-              if (!ntitle) { return res.status(400).send({ status: false, msg: "enter Valid title name " }) }
                 
               if (!isValid(body)) { return res.status(400).send({ status: false, msg: "body is required" }) }
-              let nbody = /^[a-zA-Z]{2,9}$/.test(body.trim())
-              if (!nbody) { return res.status(400).send({ status: false, msg: "enter Valid body name " }) }
-
-              
-              if (!isValid(tags)) { return res.status(400).send({ status: false, msg: "tags is required" }) }
-              let ntags = /^[a-zA-Z]{2,9}$/.test(tags.trim())
-              if (!ntags) { return res.status(400).send({ status: false, msg: "enter Valid tags name " }) }
-
+                           
               if (!isValid(category)) { return res.status(400).send({ status: false, msg: "category is required" }) }
-              let ncategory = /^[a-zA-Z]{2,9}$/.test(category.trim())
-              if (!ncategory) { return res.status(400).send({ status: false, msg: "enter Valid category name " }) }
-
-              if (!isValid(subCategory)) { return res.status(400).send({ status: false, msg: "subcategory is required" }) }
-              let nsubCategory = /^[a-zA-Z]{2,9}$/.test(subCategory.trim())
-              if (!nsubCategory) { return res.status(400).send({ status: false, msg: "enter Valid subcategory name " }) }
-
-
+               
+                       
 
                 let saveData = await blogModel.create(data)
                 res.status(201).send({ status: true, msg: saveData })

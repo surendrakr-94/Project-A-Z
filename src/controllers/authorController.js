@@ -33,7 +33,7 @@ const createAuthor = async function (req, res) {
         if (!Password) { return res.status(400).send({ status: false, msg: "enter Valid password ( min=6)request" }) }
 
         let authorCreated = await AuthorModel.create(data)
-        res.send({ data: authorCreated })
+        res.status(201).send({status: true, data: authorCreated })
     }
     catch (err) {
         console.log(err.message);
@@ -49,24 +49,22 @@ const getAuthorsData = async function (req, res) {
 
 const login = async function (req, res) {
     try {
-        let email = req.body.email
-        if (!isValid(email)) { return res.status(400).send({ status: false, msg: "email is required" }) }
-        let Email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())
-        if (!Email)
+       
+        const {email,password}= req.body
+          if (!email)
          { return res.status(400).send({ status: false, msg: "enter Valid email " }) }
         
-        let password = req.body.password
-        if (!isValid(password)) { return res.status(400).send({ status: false, msg: "password is required" }) }
-        let Password = /^[a-zA-Z0-9]{6,109}$/.test(password.trim())
-        if (!Password) 
+        
+         if (!password) 
         { return res.status(400).send({ status: false, msg: "enter Valid password ( min=6)request" }) }
         
-        let data = await AuthorModel.findOne({ email: Email, password: Password })
+        console.log(email,password)
+        let data = await AuthorModel.findOne({ email: email, password: password })
         if (!data) { return res.status(400).send({ msg: "email and password is incorrect" }) }
 
         let token = await jwt.sign({ id: data._id.toString() }, "functionupiswaywaycoolHariomSemwal")
         console.log(token)
-        res.header({ "x-powered-by": token })
+        res.header({ "x-api-key": token })
         res.status(200).send({ status: true, msg: token })
     } catch (err) {
         console.log(err.message);

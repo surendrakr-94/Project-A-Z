@@ -4,7 +4,7 @@ const blogModel = require('../models/blogModel')
 
 const authentication = async function (req, res, next) {
     try {
-        let token = req.headers["x-powered-by"]
+        let token = req.headers["x-api-key"]
         if (!token) { return res.status(404).send({ status: false, msg: "token must be present" }) }
 
         let decodeToken = jwt.verify(token, "functionupiswaywaycoolHariomSemwal")
@@ -23,7 +23,7 @@ const authentication = async function (req, res, next) {
 
 const blogAuthorisation= async function (req, res, next) {
     try {
-        let token = req.headers["x-powered-by"]
+        let token = req.headers["x-api-key"]
         if (!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
         let decodeToken = jwt.verify(token, "functionupiswaywaycoolHariomSemwal")
         console.log(decodeToken)
@@ -49,7 +49,7 @@ const blogAuthorisation= async function (req, res, next) {
 
 const AuthorisationDeleteQuery = async function (req, res, next) {
     try {
-        let token = req.headers["x-powered-by"]
+        let token = req.headers["x-api-key"]
         if(!token) { return res.status(401).send({ status: false, msg: "token must be present" }) }
 
         let decodeToken =jwt.verify(token,"functionupiswaywaycoolHariomSemwal")
@@ -67,7 +67,7 @@ const AuthorisationDeleteQuery = async function (req, res, next) {
 const  authorAuthorisationBody= async function (req, res, next) {
     try {  
         
-           let token = req.headers["x-powered-by"]
+           let token = req.headers["x-api-key"]
            authorId=req.body.authorId
            if(!authorId)       
            { return res.status(401).send({msg:"id is required"})} 
