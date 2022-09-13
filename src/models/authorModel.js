@@ -1,14 +1,16 @@
-//Import the mongoose module
+
 
 const mongoose = require('mongoose'); 
-// Define a schema
+
 const authorSchema = new mongoose.Schema({
     fName: {
         type: String,
-         required: true},  
+         required: true,
+         trim:true},  
     lName: {
         type: String, 
-        required: true
+        required: true,
+        trim:true
     },
     title: {
         type: String,
@@ -18,11 +20,17 @@ const authorSchema = new mongoose.Schema({
     email: {
         type: String,  
         required: true,
-        unique: true      
+        unique: true,
+        trim:true,
+        lowercase:true
+            
     },
     password:{
-        type: String,
+         type: String,
+         trim:true,
          required: true
         }}, {timestamps: true});
+
+
 
 module.exports = mongoose.model("Authors", authorSchema )
