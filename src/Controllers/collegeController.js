@@ -12,15 +12,23 @@ const college = async function (req,res){
 
 //=============================
 const getcollegedetails = async function (req,res){
-    let queryName= req.query
-    let collegeName =req.query.name
+    let queryName= req.query.name
+    // let collegeName =req.query.name
 
-    let collegeDetail = await collegeModel.findOne({name:collegeName, isDeleted : false})
-    res.send({status: true, msg:" find all college", data : collegeDetail})
+    let collegeDetail = await collegeModel.findOne({name:queryName, isDeleted : false}).select({ fullName:1, logoLink:1,  isDeleted: 1})
+    let collegeid = collegeDetail._id
+    console.log(collegeid)
+    
+    let findIntern = await internModel.find({collegeid})
+    const allintern = {"fullname":collegeDetail.fullName , "logoLink": collegeDetail.logoLink ,"isDeleted" : collegeDetail.isDeleted , "intern": findIntern}
 
-}
+    res.send({status: true, msg:" find all college", data : allintern})  
 
 
+
+}  
+
+  
 
 module.exports.college =college
 module.exports. getcollegedetails = getcollegedetails
