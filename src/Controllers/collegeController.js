@@ -63,11 +63,11 @@ const createCollege = async function (req, res) {
 
 const getcollegeDetails = async function (req, res) {
     try {
-        let queryName = req.query.name
-        if (!(queryName)) { return res.status(400).send({ status: false, message: "please enter name in query" }) }
+        let collegeName  = req.query.collegeName 
+        if (!(collegeName )) { return res.status(400).send({ status: false, message: "please enter name in query" }) }
 
 
-        let collegeDetail = await collegeModel.findOne({ name: queryName, isDeleted: false })
+        let collegeDetail = await collegeModel.findOne({ name: collegeName , isDeleted: false })
         if (!collegeDetail) return res.status(404).send({ status: false, message: "No college found with this name" })
 
         let collegeid = collegeDetail._id
