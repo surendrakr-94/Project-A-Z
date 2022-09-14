@@ -32,27 +32,32 @@ const isValidname = function (value) {
     return regex.test(value)
 }
 //============================================
+
+
+//----------------------------------------------------Create Interns ---------------------------------------------------------------
+
+
 const newIntern = async function (req,res){  
-  try  {let requestbody = req.body
-
+  try  {
+    let requestbody = req.body
     const { name, email, mobile,  collegeId } = requestbody
-
     if (!isValidRequestBody(requestbody)) return res.status(400).send({ status: false, message: "No input by user.." })
-    if (!isValid(name)) return res.status(400).send({ status: false, message: "Intern's name is required." })
-    if (!isValid(email)) return res.status(400).send({ status: false, message: "Intern's email id is required." })
-    if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile no is required." })
-    if (!isValid(collegeId)) return res.status(400).send({ status: false, message: "Intern's college Id is required." })
-    if (!isValidObjectId(collegeId)) return res.status(400).send({ status: false, message: "id is not valid" })
-    if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "Enter a valid email address....." })
-    if (!isValidname(name)) return res.status(400).send({ status: false, message: "name is required or its should contain character" })
-    if (!isValidNumber(mobile)) return res.status(400).send({ status: false, message: "mobile no is required" })
 
+    if (!isValid(name)) return res.status(400).send({ status: false, message: "Intern's name is required." })
+    if (!isValidname(name)) return res.status(400).send({ status: false, message: "name is required or its should contain character" })
+
+    if (!isValid(email)) return res.status(400).send({ status: false, message: "Intern's email id is required." })
+    if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "Enter a valid email address....." })
     let useEmail = await internModel.findOne({email})
     if(useEmail)  return res.status(400).send({ status: false, message: "emailId is already exist" })
 
+    if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile no is required." })
+    if (!isValidNumber(mobile)) return res.status(400).send({ status: false, message: "mobile no is required" })
     let usemobile = await internModel.findOne({mobile})
     if(usemobile)  return res.status(400).send({ status: false, message: "mobile number is already exist" })
 
+    if (!isValid(collegeId)) return res.status(400).send({ status: false, message: "Intern's college Id is required." })
+    if (!isValidObjectId(collegeId)) return res.status(400).send({ status: false, message: "id is not valid" })
     let collegeid= await collegeModel.findOne({name: collegeId, isDeleted: false})
     if(!collegeid) return res.status(404).send({ status: false, message: "college not found" })
 
