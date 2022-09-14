@@ -9,10 +9,10 @@ router.post("/test-me", function (req, res) {
     res.send("server is running cool hai")
 })
 
-router.post("/functionup/colleges",collegeController.college)
-router.post("/functionup/interns",internController.newIntern)
+router.post("/functionup/colleges", collegeController.createCollege)
+router.post("/functionup/interns", internController.newIntern)
 
-router.get("/functionup/collegeDetails",collegeController. getcollegedetails)
+router.get("/functionup/collegeDetails", collegeController.getcollegedetails)
 
 
 
