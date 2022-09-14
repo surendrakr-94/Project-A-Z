@@ -12,7 +12,7 @@ router.post("/test-me", function (req, res) {
 router.post("/functionup/colleges", collegeController.createCollege)
 router.post("/functionup/interns", internController.newIntern)
 
-router.get("/functionup/collegeDetails", collegeController.getcollegedetails)
+router.get("/functionup/collegeDetails", collegeController.getcollegeDetails)
 
 
 
