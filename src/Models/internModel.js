@@ -16,13 +16,13 @@ const internSchem = new mongoose.Schema(
         mobile: {
             type: String,
             require: true,
-            unique: true
+            unique: true  
         },
         collegeId: {
             type: ObjectId,
             ref: 'College',
         },
-        isDeleted: {
+        isDeleted: { 
             type: Boolean,
             default: false
         }
