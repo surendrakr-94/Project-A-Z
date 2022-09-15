@@ -28,7 +28,7 @@ const isValidNumber = function (value) {
 }
 
 const isValidname = function (value) {
-    let regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+    let regex =/^[a-zA-Z]+([\s][a-zA-Z]+)*$/
     return regex.test(value)
 }
 //============================================
