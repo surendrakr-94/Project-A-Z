@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-const internSchem = new mongoose.Schema(
+const internSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -10,7 +10,6 @@ const internSchem = new mongoose.Schema(
         email: {
             type: String,
             require: true,
-            match: [/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/, 'Please enter a valid email'],
             unique: true
         },
         mobile: {
@@ -31,4 +30,4 @@ const internSchem = new mongoose.Schema(
         timestamps: true
     }
 )
-module.exports = mongoose.model('Intern' , internSchem)
+module.exports = mongoose.model('Intern' , internSchema)

@@ -9,10 +9,6 @@ const isValid = function (value) {
     return true
 }
 
-const isValidObjectId = function (objectId) {
-    return mongoose.Types.ObjectId.isValid(objectId)
-};
-
 const isValidRequestBody = function (request) {
     return (Object.keys(request).length > 0)
 }
@@ -28,13 +24,18 @@ const isValidNumber = function (value) {
 }
 
 const isValidname = function (value) {
-    let regex =/^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+    let regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+    return regex.test(value)
+}
+
+const isValidCollegeName = function (value) {
+    let regex = /^[a-zA-Z]+[\.-]?[a-zA-Z]+$/
     return regex.test(value)
 }
 //============================================
 
 
-//----------------------------------------------------Create Interns ---------------------------------------------------------------
+//----------------------------------------------------Create Interns------------------------------------------------------------
 
 
 const createIntern = async function (req, res) {
@@ -44,34 +45,34 @@ const createIntern = async function (req, res) {
         if (!isValidRequestBody(internData)) return res.status(400).send({ status: false, message: "No input by user.." })
 
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Intern's name is required." })
-        if (!isValidname(name)) return res.status(400).send({ status: false, message: "name is required or its should contain character" })
+        if (!isValidname(name)) return res.status(400).send({ status: false, message: "Enter valid name i.e. fullname" })
 
-        if (!isValid(email)) return res.status(400).send({ status: false, message: "Intern's email id is required." })
-        if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "Enter a valid email address....." })
+        if (!isValid(email)) return res.status(400).send({ status: false, message: "Intern's email is required." })
+        if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "Enter a valid email" })
 
         let useEmail = await internModel.findOne({ email })
-        if (useEmail) return res.status(400).send({ status: false, message: "emailId is already exist" })
+        if (useEmail) return res.status(400).send({ status: false, message: "email is already exist" })
 
-        if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile no is required." })
-        if (!isValidNumber(mobile)) return res.status(400).send({ status: false, message: "mobile no is required" })
+        if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile is required." })
+        if (!isValidNumber(mobile)) return res.status(400).send({ status: false, message: "Enter valid mobile" })
 
-        let usemobile = await internModel.findOne({ mobile })
-        if (usemobile) return res.status(400).send({ status: false, message: "mobile number is already exist" })
+        let useMobile = await internModel.findOne({ mobile })
+        if (useMobile) return res.status(400).send({ status: false, message: "mobile is already exist" })
 
-        if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "Intern's college Id is required." })
-        if (!isValidname(collegeName)) return res.status(400).send({ status: false, message: "id is not valid" })
+        if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "Intern's collegeName is required." })
+        if (!isValidCollegeName(collegeName)) return res.status(400).send({ status: false, message: "Enter valid collegeName" })
 
         let getcollegeid = await collegeModel.findOne({ name: collegeName, isDeleted: false })
-        if (!getcollegeid) return res.status(404).send({ status: false, message: "college not found" })
+        if (!getcollegeid) return res.status(404).send({ status: false, message: "No college found with this name" })
 
         let collegeId = getcollegeid._id
         let newIntern = { name, email, mobile, collegeId }
 
 
         let newInterndata = await internModel.create(newIntern)
-        res.status(201).send({ status: true, message: "successfully created", data: newInterndata })
+        return res.status(201).send({ status: true, message: "successfully created", data: newInterndata })
     }
-    catch (error) { return res.status(500).send({ message: error.message }) }
+    catch (error) { return res.status(500).send({ status: false, message: error.message }) }
 }
 
 
