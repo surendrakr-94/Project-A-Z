@@ -35,9 +35,9 @@ const isValidURL = function (value) {
 
 const createCollege = async function (req, res) {
     try {
-        let collegeData  = req.body
-        const { name, fullName, logoLink } = collegeData 
-        if (!isVaildRequestBody(collegeData )) return res.status(400).send({ status: false, message: "no input by user" })
+        let collegeData = req.body
+        const { name, fullName, logoLink } = collegeData
+        if (!isVaildRequestBody(collegeData)) return res.status(400).send({ status: false, message: "no input by user" })
 
         if (!isVaild(name)) return res.status(400).send({ status: false, message: "college name is required" })
         if (!isValidname(name)) return res.status(400).send({ status: false, message: "name is required or its should contain character" })
@@ -50,10 +50,10 @@ const createCollege = async function (req, res) {
 
         if (!isValidURL(logoLink)) return res.status(400).send({ status: false, message: "URL is not valid" })
 
-        let newCollege = await collegeModel.create(collegeData )
-        res.send({ status: true, message: "successfully created", data: newCollege })
+        let newCollege = await collegeModel.create(collegeData)
+        res.status(201).send({ status: true, message: "successfully created", data: newCollege })
     }
-    catch (error) { return res.status(500).send({ msg: error.message }) }
+    catch (error) { return res.status(500).send({ message: error.message }) }
 
 }
 
@@ -63,11 +63,11 @@ const createCollege = async function (req, res) {
 
 const getcollegeDetails = async function (req, res) {
     try {
-        let collegeName  = req.query.collegeName 
-        if (!(collegeName )) { return res.status(400).send({ status: false, message: "please enter name in query" }) }
+        let collegeName = req.query.collegeName
+        if (!(collegeName)) { return res.status(400).send({ status: false, message: "please enter name in query" }) }
 
 
-        let collegeDetail = await collegeModel.findOne({ name: collegeName , isDeleted: false })
+        let collegeDetail = await collegeModel.findOne({ name: collegeName, isDeleted: false })
         if (!collegeDetail) return res.status(404).send({ status: false, message: "No college found with this name" })
 
         let collegeid = collegeDetail._id
@@ -82,7 +82,7 @@ const getcollegeDetails = async function (req, res) {
                 "isDeleted": collegeDetail.isDeleted,
                 "intern": "No intern applicable"
             }
-            res.status(200).send({ status: true,message: " find all college", data: allinterns })
+            res.status(200).send({ status: true, message: " All college", data: allinterns })
         }
 
         const allinterns = {
@@ -93,7 +93,7 @@ const getcollegeDetails = async function (req, res) {
             "intern": findIntern
         }
 
-        res.status(200).send({ status: true, message: " find all college", data: allinterns })
+        res.status(200).send({ status: true, message: "Internship application successfull", data: allinterns })
 
     } catch (error) { return res.status(500).send({ message: error.message }) }
 
