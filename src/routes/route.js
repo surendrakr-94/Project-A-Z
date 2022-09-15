@@ -5,9 +5,9 @@ const internController = require('../Controllers/internController')
 
 
 
-router.post("/test-me", function (req, res) {
-    res.send("server is running cool hai")
-})
+// router.post("/test-me", function (req, res) {
+//     res.send("server is running cool hai")
+// })
 
 router.post("/functionup/colleges", collegeController.createCollege)
 router.post("/functionup/interns", internController.newIntern)
