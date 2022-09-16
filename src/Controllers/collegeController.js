@@ -41,11 +41,11 @@ const createCollege = async function (req, res) {
         const queryParams = req.query
         const { name, fullName, logoLink } = collegeData
 
-        
-        if(Object.keys(collegeData).length > 4)return res.status(400).send({status:false , message: "invalid data entered inside request body"})
+
+        if (Object.keys(collegeData).length > 4) return res.status(400).send({ status: false, message: "invalid data entered inside request body" })
 
         if (!isVaildRequestBody(collegeData)) return res.status(400).send({ status: false, message: "no input by user" })
-        if(isValidRequestBody(queryParams))return res.status(400).send({status:false , message:"invalid request"})
+        if (isValidRequestBody(queryParams)) return res.status(400).send({ status: false, message: "invalid request" })
         if (!isVaild(name)) return res.status(400).send({ status: false, message: "College name is required" })
         if (!isValidname(name)) return res.status(400).send({ status: false, message: "enter valid name" })
 

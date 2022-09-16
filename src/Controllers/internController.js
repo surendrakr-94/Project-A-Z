@@ -43,7 +43,7 @@ const createIntern = async function (req, res) {
         let internData = req.body
         const queryParams = req.query
         if (!isValidRequestBody(internData)) return res.status(400).send({ status: false, message: "No input by user.." })
-        if(isValidRequestBody(queryParams)){return res.status(400).send({status:false , message:"invalid request"})}
+        if (isValidRequestBody(queryParams)) return res.status(400).send({ status: false, message: "invalid request" })
 
         const { name, email, mobile, collegeName } = internData
         if (!isValidRequestBody(internData)) return res.status(400).send({ status: false, message: "No input by user.." })
