@@ -14,9 +14,6 @@ const isVaildRequestBody = function (request) {
     return (Object.keys(request).length > 0)
 }
 
-
-
-
 const isValidfullname = function (value) {
     let regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
     return regex.test(value)
@@ -45,12 +42,12 @@ const createCollege = async function (req, res) {
         if (Object.keys(collegeData).length > 4) return res.status(400).send({ status: false, message: "invalid data entered inside request body" })
 
         if (!isVaildRequestBody(collegeData)) return res.status(400).send({ status: false, message: "no input by user" })
-        if (isValidRequestBody(queryParams)) return res.status(400).send({ status: false, message: "invalid request" })
+        if (isVaildRequestBody(queryParams)) return res.status(400).send({ status: false, message: "invalid request" })
         if (!isVaild(name)) return res.status(400).send({ status: false, message: "College name is required" })
         if (!isValidname(name)) return res.status(400).send({ status: false, message: "enter valid name" })
 
         let duplicateName = await collegeModel.findOne({ name })
-        if (duplicateName) return res.status(400).send({ status: false, message: "name already exist" })
+        if (duplicateName) return res.status(409).send({ status: false, message: "name already exist" })
 
         if (!isVaild(fullName)) return res.status(400).send({ status: false, message: "college fullname is required" })
         if (!isValidfullname(fullName)) return res.status(400).send({ status: false, message: "Enter valid fullname" })
@@ -72,7 +69,7 @@ const createCollege = async function (req, res) {
 const getcollegeDetails = async function (req, res) {
     try {
         let collegeName = req.query.collegeName
-        if (!(collegeName)) { return res.status(400).send({ status: false, message: "please enter name" }) }
+        if (!(collegeName)) return res.status(400).send({ status: false, message: "please enter name" })
         if (!isValidname(collegeName)) return res.status(400).send({ status: false, message: "enter valid collegeName" })
 
         let collegeDetail = await collegeModel.findOne({ name: collegeName, isDeleted: false })
@@ -103,7 +100,4 @@ const getcollegeDetails = async function (req, res) {
 
 module.exports.createCollege = createCollege
 module.exports.getcollegeDetails = getcollegeDetails
-
-
-
 

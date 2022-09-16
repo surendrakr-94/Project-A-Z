@@ -42,7 +42,7 @@ const createIntern = async function (req, res) {
     try {
         let internData = req.body
         const queryParams = req.query
-        if (!isValidRequestBody(internData)) return res.status(400).send({ status: false, message: "No input by user.." })
+   
         if (isValidRequestBody(queryParams)) return res.status(400).send({ status: false, message: "invalid request" })
 
         const { name, email, mobile, collegeName } = internData
@@ -55,13 +55,13 @@ const createIntern = async function (req, res) {
         if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "Enter a valid email" })
 
         let useEmail = await internModel.findOne({ email })
-        if (useEmail) return res.status(400).send({ status: false, message: "email is already exist" })
+        if (useEmail) return res.status(409).send({ status: false, message: "email is already exist" })
 
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Intern's mobile is required." })
         if (!isValidNumber(mobile)) return res.status(400).send({ status: false, message: "Enter valid mobile" })
 
         let useMobile = await internModel.findOne({ mobile })
-        if (useMobile) return res.status(400).send({ status: false, message: "mobile is already exist" })
+        if (useMobile) return res.status(409).send({ status: false, message: "mobile is already exist" })
 
         if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "Intern's collegeName is required." })
         if (!isValidCollegeName(collegeName)) return res.status(400).send({ status: false, message: "Enter valid collegeName" })
