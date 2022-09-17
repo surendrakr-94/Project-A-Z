@@ -15,7 +15,8 @@ const isVaildRequestBody = function (request) {
 }
 
 const isValidfullname = function (value) {
-    let regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+ let regex = /^[a-zA-Z, ]*$/
+                             
     return regex.test(value)
 }
 
