@@ -1,21 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const Blog = require("../controllers/BlogController")
-const Author = require("../controllers/authorController")
-const middle = require("../middleware/midd.js")
+const authorController = require("../controllers/authorController.js")
+const blogController = require("../controllers/blogController")
+const commonMW = require('../middleware/auth')
+
+// create author api
+router.post("/authors", authorController.createAuthor)
+//Login Author
+router.post('/login', authorController.loginAuthor)
+
+// create blog api
+router.post("/blogs", commonMW.authentication, blogController.createBlog)
+
+//get blogs 
+router.get("/getBlogs", commonMW.authentication, blogController.getBlogs)
+
+//update blogs
+router.put("/blogs/:blogId", commonMW.authentication, commonMW.authorization, blogController.updateBlog)
+
+// DELETE /blogs/:blogId
+router.delete('/blogs/:blogId', commonMW.authentication, commonMW.authorization, blogController.deleteByBlogID)
+
+// DELETE /blogs?queryParams
+router.delete("/blogs", commonMW.authentication, commonMW.authorization, blogController.deleteByFilter)
 
 
-router.get("/test-me", function (req, res) {
-    res.send("My first ever api!")
-})
-
-router.post("/createAuthor", Author.createAuthor)
-router.get("/GetAuthor", Author.getAuthorsData)
-router.get("/login", Author.login)
-router.post("/blogs", middle.authorAuthorisationBody, Blog.createBlog)
-router.get("/blogs", middle.authentication, Blog.getBlogsData)
-router.put("/blogs/:blogId", middle.authentication, middle.blogAuthorisation, Blog.updateBlog,)
-router.delete("/blogs/:blogId", middle.authentication, Blog.deleteById)
-router.delete("/blogsqueryParams", middle.AuthorisationDeleteQuery, Blog.deleteBlogsquery)
-
-module.exports = router;
+module.exports = router
