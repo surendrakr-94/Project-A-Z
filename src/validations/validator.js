@@ -1,11 +1,13 @@
 const joi = require('joi')
-Joi.objectId = require('joi-objectid')(Joi)
+// Joi.objectId = require('joi-objectid')(Joi)
 module.exports = {
+
+    // messages({ 'any.only': 'rating should be between 1 to 5' })
     //SCHEMA VALIDATION FOR USERMODEL
     UserModel: joi.object({
-        title: joi.string().required().valid(Mr, Mrs, Miss).message("Title should be among Mr, Mrs, Miss"),
+        title: joi.string().required().valid("Mr", "Mrs", "Miss").messages({ 'any.only': 'Title should be among Mr, Mrs, Miss' }),
         name: joi.string().required(),
-        phone: joi.string().required().min(1000000000).message("Please enter a valid number").max(9999999999).message("Please enter a valid number"),
+        phone: joi.string().required().min(10). message({ 'any.only': 'Please enter a valid number' }).max(10).message("Please enter a valid number"),
         email: joi.string().required().email(),
         password: joi.string().min(8).max(15).required(),
         address: {
@@ -29,7 +31,13 @@ module.exports = {
         //  bookId : joi.objectId().required(),
         reviewedBy : joi.string().required(),
         reviewedAt : joi.date().required(),
-        rating : joi.number().min(1).message("rating should be between 1 to 5").max(5).message("rating should be between 1 to 5").required(),
+        rating : joi.number().min(1).messages({ 'any.only': 'rating should be greater than 1 ' }).max(5).messages({ 'any.only': 'rating should be less than 5' }).required(),
         review : joi.string(),
     }),
+
+    //LOGIN VALIDATION
+    loginvalidation : joi.object({
+        email: joi.string().required().email(),
+        password: joi.string().min(8).max(15).required(),
+    })
 }

@@ -3,32 +3,43 @@ const validation = require('../validations/validator')
 module.exports = {
 
     uservalidation : (req,res,next) => {
-        const error= validation.UserModel.validate(req.body)
+        const {error}= validation.UserModel.validate(req.body)
         if(error)
         {
             res.status(400).send({
+                status : false ,
                 message : error.message
             })
         } else next()
     },
 
     bookvalidation : (req,res,next) => {
-        const error = validation.BooksModel.validate(req.body)
+        const {error} = validation.BooksModel.validate(req.body)
         if(error)
         {
-            res.status(400).send({
+            res.status(400).send({status : false ,
                 message : error.message
             })
         }else next()
     },
 
     reviewvalidation : (req,res,next) => {
-        const error = validation.ReviewModel.validate(req.body)
+        const {error} = validation.ReviewModel.validate(req.body)
         if(error)
         {
             res.status(400).send(
-                {message : error.message}
+                {status : false ,message : error.message}
             )
         }else next()
-    }
+    } ,
+    loginvalidation : (req,res,next) => {
+        const {error} = validation.loginvalidation.validate(req.body)
+        if(error)
+        {
+            res.status(400).send(
+                {status : false ,message : error.message}
+            )
+        }else next()
+    } ,
+
 }
