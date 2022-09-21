@@ -23,7 +23,7 @@ module.exports = {
         // userId : joi.objectId().required(),
         ISBN: joi.string().required(),
         category : joi.string().required(),
-        subcategory : joi.string().required(),
+        subcategory : joi.string(),//.required(),
         reviews : joi.number(),
     }),
     //SCHEMA VALIDATION FOR REVIEWMODEL

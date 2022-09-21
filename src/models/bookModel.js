@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId
+const moment = require("moment")
+
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -11,7 +13,7 @@ const bookSchema = new mongoose.Schema({
     },
     userId: {
         type: ObjectId,
-        ref: "user",
+        ref: "User",
         required: true
     },
     ISBN: {
@@ -26,19 +28,17 @@ const bookSchema = new mongoose.Schema({
         type: [String]
     },
     reviews: {
-        type: number,
-        default: 0,
-        comment: Holds
+        type: Number,
+        default: 0
+    //    comment: Holds
     },
     deletedAt: {
         type: Date
     },
-
     isDeleted: {
         type: Boolean,
         default: false
     },
-
     releasedAt: {
         type: Date,
     },
