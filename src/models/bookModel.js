@@ -5,11 +5,13 @@ const moment = require("moment")
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim : true
     },
     excerpt: {
         type: String,
-        required: true
+        required: true,
+        trim : true
     },
     userId: {
         type: ObjectId,
@@ -28,7 +30,7 @@ const bookSchema = new mongoose.Schema({
         type: [String]
     },
     reviews: {
-        type: number,
+        type: Number,
         default: 0,
     },
     deletedAt: {
@@ -40,6 +42,7 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
+        // required : true
     },
 
     createdAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") },

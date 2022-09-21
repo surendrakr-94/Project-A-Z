@@ -1,5 +1,5 @@
 const joi = require('joi')
-// Joi.objectId = require('joi-objectid')(Joi)
+//  const objectId = require('joi-objectid')
 module.exports = {
 
     // messages({ 'any.only': 'rating should be between 1 to 5' })
@@ -20,15 +20,16 @@ module.exports = {
     BooksModel: joi.object({
         title: joi.string().required(),
         excerpt: joi.string().required(),
-        // userId : joi.objectId().required(),
+        userId : joi.required(),
         ISBN: joi.string().required(),
         category : joi.string().required(),
-        subcategory : joi.string(),//.required(),
+        subcategory : joi.string(),
+        // releasedAt : joi.required(),
         reviews : joi.number(),
     }),
     //SCHEMA VALIDATION FOR REVIEWMODEL
     ReviewModel: joi.object({
-        //  bookId : joi.objectId().required(),
+         bookId : joi.required(),
         reviewedBy : joi.string().required(),
         reviewedAt : joi.date().required(),
         rating : joi.number().min(1).messages({ 'any.only': 'rating should be greater than 1 ' }).max(5).messages({ 'any.only': 'rating should be less than 5' }).required(),
@@ -39,5 +40,13 @@ module.exports = {
     loginvalidation : joi.object({
         email: joi.string().required().email(),
         password: joi.string().min(8).max(15).required(),
+    }),
+
+    //GET BOOK VALIDATION
+    getbookbyfiltervalidation : joi.object({
+        category : joi.string(),
+        subcategory : joi.string()
     })
+
 }
+
