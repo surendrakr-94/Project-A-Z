@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const moment = require('moment')
 
 const userSchema = new mongoose.Schema({
-
     title: {
         type: String,
         required: true,
@@ -32,12 +31,9 @@ const userSchema = new mongoose.Schema({
         trim: true
     },
     address: {
-        street: {
-            type: String, trim: true},
-        city: {
-            type: String, trim: true },
-        pincode: {
-            type: String, trim: true}
+        street: {type: String, trim: true},
+        city: {type: String, trim: true },
+        pincode: {type: String, trim: true}
     },
     createdAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") },
     updatedAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") }

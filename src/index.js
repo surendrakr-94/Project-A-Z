@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://Sushant_Bhaiswar_30:WBYUu1bCYmxmZUmg@cluster0.jui41on.mongodb.net/group17Database?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://Sushant_Bhaiswar_30:WBYUu1bCYmxmZUmg@cluster0.jui41on.mongodb.net/group17Database", {
     useNewUrlParser: true
 })
     .then(() => console.log("MongoDb is connected"))
@@ -14,5 +14,5 @@ mongoose.connect("mongodb+srv://Sushant_Bhaiswar_30:WBYUu1bCYmxmZUmg@cluster0.ju
 app.use('/', route)
 
 app.listen(3000, function () {
-    console.log('Express app running on port ' + (3000))
+    console.log('Express app running on port ' + 3000)
 });

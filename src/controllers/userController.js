@@ -21,14 +21,14 @@ module.exports = {
 
         let findUser = await userModel.findOne({ email: email, password: password }); 
         if (!findUser) return res.status(404).send({ status: false, message: "emailId or password is incorrect" })
-        
+    
         let token = jwt.sign({
             userId : findUser._id
         },
         "secret-Hai-ye-batan-mat", { expiresIn: "1m" },)
         
         res.setHeader("header" ,token) 
-        res.status(200).send({Message : "Login successful" , data : token})
+        res.status(200).send({Message : "LoggedIn successfully" , data : token})
     } catch (err) {
         return res.status(500).send({ status: false, message: err.message })
     }
