@@ -27,14 +27,16 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
     subcategory: {
-        type: [String]
+        type: String,
+        required : true
     },
     reviews: {
         type: Number,
         default: 0,
     },
     deletedAt: {
-        type: Date
+        type: String,
+        default: null
     },
     isDeleted: {
         type: Boolean,
@@ -42,7 +44,7 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        // required : true
+        required : true
     },
 
     createdAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") },

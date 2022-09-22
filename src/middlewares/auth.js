@@ -1,49 +1,23 @@
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 const mongoose = require('mongoose')
+const bookModel = require('../models/bookModel')
 module.exports = {
     authontication: (req, res, next) => {
         try {
             let token = req.headers['x-auth-token']
             if (!token) { return res.status(400).send({ status: false, message: "Token is missing" }) }
     
-            jwt.verify(token, "secret-Hai-ye-batan-mat", function (error, decodedToken) {    
-                if (error) {
-                  
-                    return res.status(403).send({ status: false, msg: error.message })
-                }
-                if (Date.now() > decodedToken.payloadDetails.exp) {
-                    return res.status(401).send({
-                        status: false,
-                        message: "Token is Expired",
-                    })
-                }
-             req.decodedToken = decodedToken
-              console.log(decodedToken)
+          jwt.verify(token, "secret-Hai-ye-batan-mat", function (error, decoded) {    
+                if (error) return res.status(400).send({ status: false, msg: error.message })
+
+             req.decodedToken = decoded
                next()
             })
         } catch (error) {
             return res.status(500).send({ status: false, message: error.message })
         }
     },
-     
-    
-    // const authontication = async function(req,res,next){
-    //     // try{
-    //      let token= req.headers["X-auth-token"];
-    //      if(!token) token= req.headers["x-auth-token"]
-    //      if (!token) return res.send({ status: false, message: "token must be present" }); 
-    //      jwt.verify(token, "secret-Hai-ye-batan-mat",function (err, decoded) {
-    //         if (err) {
-    //              return res.status(401).send({ status: false, message: err.message })
-    //         } else {
-    //             console.log(decoded)
-    //             req.decodedToken=decoded
-    //             next()
-    //         }
-    //     })
-    // }
-    
 
 
   authorise : async (req, res, next) => {
@@ -51,10 +25,25 @@ module.exports = {
         let ObjectID = mongoose.Types.ObjectId
         if (req.body.userId) {
             let {userId} = req.body
-            if (!ObjectID.isValid(userId)) { return res.status(401).send({ status: false, message: "Not a valid UserID" }) }
+            if (!ObjectID.isValid(userId)) { return res.status(400).send({ status: false, message: "Not a valid UserID" }) }
             if (userId !== req.decodedToken.userId) {
                 return res.status(403).send({ status: false, message: "You are not a authorized user" })
             }
+            return next()
+        }  
+        if (req.params.bookId) {
+            let {bookId} = req.params
+
+
+            
+            let finduserid = await bookModel.findById( bookId )         
+
+             if (!ObjectID.isValid(finduserid.userId)) { return res.status(400).send({ status: false, message: "Not a valid UserID" }) }
+             if (finduserid.userId !== req.decodedToken.userId) {
+                 return res.status(403).send({ status: false, message: "You are not a authorized user" })
+             }
+             if (finduserid.isDeleted == true) return res.status(404).send({ status: false, message: "Data not found it must be deleted"  })
+
             return next()
         }  
     }

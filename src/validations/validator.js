@@ -18,13 +18,13 @@ module.exports = {
     }),
     //SCHEMA VALIDATION FOR BOOKMODEL
     BooksModel: joi.object({
-        title: joi.string().required(),
-        excerpt: joi.string().required(),
+        title: joi.string().trim().required(),
+        excerpt: joi.string().trim().required(),
         userId : joi.required(),
-        ISBN: joi.string().required(),
-        category : joi.string().required(),
-        subcategory : joi.string(),
-        // releasedAt : joi.required(),
+        ISBN: joi.string().trim().required(),
+        category : joi.string().trim().required(),
+        subcategory : joi.string().trim().required(),
+        releasedAt : joi.required(),
         reviews : joi.number(),
     }),
     //SCHEMA VALIDATION FOR REVIEWMODEL

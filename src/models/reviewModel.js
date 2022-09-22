@@ -4,20 +4,18 @@ const moment = require("moment")
 
 const reviewSchema = new mongoose.Schema(
     {
-        userId: {
+        bookId: {
             type: ObjectId,
-            ref: "User",
+            ref: "Book",
             required: true
         },
         reviewedBy: {
             type: String,      
-           
         },
         reviewedAt: {
             type: Date,
-            required : true
+            required : true,
         },
-
         rating: {
              type: Number 
             },
