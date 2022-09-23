@@ -33,15 +33,15 @@ module.exports = {
         }  
         if (req.params.bookId) {
             let {bookId} = req.params
-
-
+            if (!ObjectID.isValid(bookId)) { return res.status(400).send({ status: false, message: "Not a valid UserID" }) }
+         
+            let finduserid = await bookModel.findOne( {_id :bookId , isDeleted : false} )      
+            if (!finduserid) return res.status(404).send({ status: false, message: "Data not found it must be deleted" })         
             
-            let finduserid = await bookModel.findById( bookId )         
-
-             if (!ObjectID.isValid(finduserid.userId)) { return res.status(400).send({ status: false, message: "Not a valid UserID" }) }
-             if (finduserid.userId !== req.decodedToken.userId) {
+             if (finduserid.userId.toString() !== req.decodedToken.userId) {
                  return res.status(403).send({ status: false, message: "You are not a authorized user" })
              }
+            
              if (finduserid.isDeleted == true) return res.status(404).send({ status: false, message: "Data not found it must be deleted"  })
 
             return next()

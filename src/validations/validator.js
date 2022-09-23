@@ -1,8 +1,6 @@
 const joi = require('joi')
-//  const objectId = require('joi-objectid')
-module.exports = {
 
-    // messages({ 'any.only': 'rating should be between 1 to 5' })
+module.exports = {
     //SCHEMA VALIDATION FOR USERMODEL
     UserModel: joi.object({
         title: joi.string().required().valid("Mr", "Mrs", "Miss").messages({ 'any.only': 'Title should be among Mr, Mrs, Miss' }),
@@ -30,7 +28,7 @@ module.exports = {
     //SCHEMA VALIDATION FOR REVIEWMODEL
     ReviewModel: joi.object({
          bookId : joi.required(),
-        reviewedBy : joi.string().required(),
+        reviewedBy : joi.string(),
         reviewedAt : joi.date().required(),
         rating : joi.number().min(1).messages({ 'any.only': 'rating should be greater than 1 ' }).max(5).messages({ 'any.only': 'rating should be less than 5' }).required(),
         review : joi.string(),
