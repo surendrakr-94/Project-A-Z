@@ -2,13 +2,14 @@ const jwt = require('jsonwebtoken')
 const moment = require('moment')
 const mongoose = require('mongoose')
 const bookModel = require('../models/bookModel')
+require('dotenv').config()
 module.exports = {
     authontication: (req, res, next) => {
         try {
             let token = req.headers['x-auth-token']
             if (!token) { return res.status(400).send({ status: false, message: "Token is missing" }) }
     
-          jwt.verify(token, "secret-Hai-ye-batan-mat", function (error, decoded) {    
+          jwt.verify(token, process.env.SECRET_KEY, function (error, decoded) {    
                 if (error) return res.status(400).send({ status: false, msg: error.message })
 
              req.decodedToken = decoded

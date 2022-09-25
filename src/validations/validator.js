@@ -1,3 +1,4 @@
+const { number } = require('joi')
 const joi = require('joi')
 
 module.exports = {
@@ -44,6 +45,12 @@ module.exports = {
     getbookbyfiltervalidation : joi.object({
         category : joi.string(),
         subcategory : joi.string()
+    }),
+    updatereviewvalidation : joi.object({
+        review: joi.string(),
+    rating: joi.number(),
+    reviewedBy: joi.string(),
+        rating : joi.number().min(1).messages({ 'any.only': 'rating should be greater than 1 ' }).max(5).messages({ 'any.only': 'rating should be less than 5' }).required(),
     })
 
 }

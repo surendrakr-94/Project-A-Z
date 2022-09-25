@@ -34,5 +34,11 @@ module.exports = {
            return res.status(400).send({ status: false, message: error.message })
         } else next()
     },
+    updatereviewvalidation: (req, res, next) => {
+        const { error } = validation.updatereviewvalidation.validate(req.body)
+        if (error) {
+           return res.status(400).send({ status: false, message: error.message })
+        } else next()
+    },
 
 }

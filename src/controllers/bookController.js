@@ -7,15 +7,13 @@ const createBook = async (req, res) => {
     try {
         let data = req.body
         let { ISBN, releasedAt, title } = data
+        if (! /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(releasedAt))
+        return res.status(400).send({ status: false, message: "date is not in correct format" })
 
         let uniqueisbn = await bookModel.findOne({ ISBN: ISBN, isDeleted: false })
-        let uniquetitle = await bookModel.findOne({ title: title, isDeleted: false })
-
-        if (! /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(releasedAt))
-            return res.status(400).send({ status: false, message: "date is not in correct format" })
-
-        if (uniquetitle) return res.status(400).send({ status: false, message: "Title should be unique" })
         if (uniqueisbn) return res.status(400).send({ status: false, message: "ISBN should be unique" })
+        let uniquetitle = await bookModel.findOne({ title: title, isDeleted: false })
+        if (uniquetitle) return res.status(400).send({ status: false, message: "Title should be unique" })
 
         let saveData = await bookModel.create(data)
         return res.status(201).send({ status: true, message: "data created successfully", data: saveData })
@@ -79,7 +77,6 @@ const updateBook = async (req, res) => {
                 return res.status(400).send({ status: false, message: "ISBN is already exist...plz try another ISBN" })
         
         let updateData = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $set: data, updatedAt: moment().format("DD-MM-YYYY  h:mm:ss a") }, { new: true })
-       
        if(!updateData) return res.status(404).send({ status: false, message: "Data Not Found because you did some chutiyapa",  })
 
         return res.status(200).send({ status: true, message: "Data successfully updated", data: updateData })

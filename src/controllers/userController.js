@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel")
 const jwt = require("jsonwebtoken")
-const moment = require('moment')
+require('dotenv').config()
  
 module.exports = {
  createUser : async (req,res) =>{
@@ -31,8 +31,8 @@ module.exports = {
         let token = jwt.sign({
             userId : findUser._id      
         },
-        "secret-Hai-ye-batan-mat", { expiresIn: "1d" })
-        let decode = jwt.verify(token ,"secret-Hai-ye-batan-mat")
+        "process.env.SECRET_KEY", { expiresIn: "1d" })
+        let decode = jwt.verify(token ,"process.env.SECRET_KEY")
 
         res.setHeader("header" ,token) 
         res.status(200).send({Message : "LoggedIn successfully" , data : token ,userId:decode.userId ,iat : decode.iat ,exp : decode.exp})
