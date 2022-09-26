@@ -6,9 +6,8 @@ require('dotenv').config()
 
 app.use(express.json());
 
-mongoose.connect(process.env.DB, {
-    useNewUrlParser: true
-})
+ mongoose.connect(process.env.DB, {
+    useNewUrlParser: true})
     .then(() => console.log("MongoDb is connected"))
     .catch(err => console.log(err))
 
