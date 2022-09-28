@@ -15,8 +15,10 @@ module.exports = {
             pincode: joi.string(),
         }
     }),
+    
     //SCHEMA VALIDATION FOR BOOKMODEL
     BooksModel: joi.object({
+       
         title: joi.string().trim().required(),
         excerpt: joi.string().trim().required(),
         userId : joi.required(),

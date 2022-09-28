@@ -46,7 +46,9 @@ const bookSchema = new mongoose.Schema({
         type: Date,
         required : true
     },
-
+    bookcover : {
+      type : String
+    },
     createdAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") },
     updatedAt: { type: String, default: moment().format("DD-MM-YYYY  h:mm:ss a") }
 });

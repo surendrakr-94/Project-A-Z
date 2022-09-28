@@ -7,12 +7,12 @@ const bookController = require("../controllers/bookController")
 const { reviewbookbybookid, updatereviewbookbybookid, deletereviewbyid } = require("../controllers/reviewController")
 const userModel = require("../validations/validator")
 // const validator = require('express-joi-validation').createValidator({})
-
+const aws= require("aws-sdk")
 
 router.post("/register",validationmware.uservalidation  ,userController.createUser)//create user
 router.post("/login" , validationmware.loginvalidation,userController.login)//login user
 
-router.post("/books", authontication ,validationmware.bookvalidation,authorise ,bookController.createBook)//create book
+router.post("/books", /*authontication ,*/validationmware.bookvalidation,/*authorise ,*/bookController.createBook)//create book
 router.get("/books", validationmware.filterbookvalidation, bookController.getBooks1)//get books by query
 router.get("/books/:bookId",  bookController.getBookbyparms)//get books by params
 router.put("/books/:bookId", authontication, authorise, bookController.updateBook)//update books
@@ -22,6 +22,16 @@ router.post("/books/:bookId/review", validationmware.reviewvalidation, reviewboo
 router.put("/books/:bookId/review/:reviewId", validationmware.updatereviewvalidation, updatereviewbookbybookid) //update review
 router.delete("/books/:bookId/review/:reviewId", deletereviewbyid) //delete review
 
+
+aws.config.update({
+    accessKeyId: "AKIAY3L35MCRZNIRGT6N",
+    secretAccessKey: "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",
+    region: "ap-south-1"
+})
+
+
+
 router.all("/*", (req,res)=>{  return res.status(400).send({status: false , msg : "Endpoint is not valid"})})
+
 
 module.exports = router

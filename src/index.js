@@ -2,9 +2,14 @@ const express = require('express');
 const route = require('./routes/route');
 const  mongoose  = require('mongoose');
 const app = express();
+const multer = require("multer");
 require('dotenv').config()
 
 app.use(express.json());
+app.use( multer().any())
+
+
+app.use(express.urlencoded({ extended: true }));
 
  mongoose.connect(process.env.DB, {
     useNewUrlParser: true})
